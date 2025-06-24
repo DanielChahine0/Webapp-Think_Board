@@ -15,4 +15,6 @@ I created a REST API, which allows my 2 client and server to talk to each other.
 ## Changes to my JSON Package
 1. Changed the type to module to be able to use proper imports `"type": "module"`
 2. Installed nodemon to simulate a live server `"devDependencies": {"nodemon": "^3.1.10"}`
-3. Added a script called dev to run the server.js using nodemod `"dev": "nodemon server.js"`
+3. Added 2 script:
+   1. First called dev to run the server.js using nodemod `"dev": "nodemon server.js"`
+   2. Second Called start to run the server without listening to changes
