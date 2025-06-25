@@ -1,9 +1,9 @@
 import Note from "../models/Note.js"
 
-export async function getAllNotes(req,res) {
+export async function getAllNotes(_, res) {
     try {
         // Find and print the list of notes
-        const notes = await Note.find();
+        const notes = await Note.find().sort({createdAt:-1}); //newest one at the top 
         res.status(200).json(notes);
     } catch (error) {
         // If anything goes wrong, then print the error and exit with status 500
@@ -14,6 +14,7 @@ export async function getAllNotes(req,res) {
 
 export async function getNoteById(req, res){
     try {
+        // Get the body of the id of the parameter passed in the URL and look for the note with that Id
         const note = await Note.findById(req.params.id, {new: true});
         if (!note) res.status(404).json({message:"Note Not Found"});
         res.status(200).json(note);
@@ -24,7 +25,7 @@ export async function getNoteById(req, res){
     }
 }
 
-export async function createNote(req,res) {
+export async function createNote(req, res) {
     try {
         // Get the body of the request
         const {title, content} = req.body;
@@ -39,7 +40,7 @@ export async function createNote(req,res) {
     }
 };
 
-export async function updateNote(req,res) {
+export async function updateNote(req, res) {
     try {
         // Get the body of the request
         const {title, content} = req.body;
@@ -60,7 +61,7 @@ export async function updateNote(req,res) {
     }
 };
 
-export async function deleteNote(req,res) {
+export async function deleteNote(req, res) {
     try {
         const deletedNote = await Note.findByIdAndDelete(req.params.id);
         if (!deletedNote) return res.status(404).json({message:"Note Not Found"});
