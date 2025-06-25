@@ -19,6 +19,9 @@ First, there is a `source` folder that separate the code from the installed pack
 I created a separate folder for the `routes` and then linked them to the server using prefixing.
 Even for the routes files, I have created a `controller` folder that contains all of the functions (separated by files) necessary for the routes.
 
+## Secrecy 
+Created a `.env` file that keeps tracks of our environment variable, this file will be hidden using the gitignore system. It will contain the port we're running the server on and the link for the database. 
+
 --- 
 ## Changes to my JSON Package
 1. Changed the type to module to be able to use proper imports `"type": "module"`
