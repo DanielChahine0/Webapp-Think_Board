@@ -14,13 +14,15 @@ I created a REST API, which allows my 2 client and server to talk to each other.
 - PUT → Update a post
 - DELETE → Delete a post
 
-## Separation of Files
-I created a separate folder for the routes and then linked them using prefixing.
+## Separation of Files & Folders
+First, there is a `source` folder that separate the code from the installed packages and the JSON files.
+I created a separate folder for the `routes` and then linked them to the server using prefixing.
+Even for the routes files, I have created a `controller` folder that contains all of the functions (separated by files) necessary for the routes.
 
 --- 
 ## Changes to my JSON Package
 1. Changed the type to module to be able to use proper imports `"type": "module"`
 2. Installed nodemon to simulate a live server `"devDependencies": {"nodemon": "^3.1.10"}`
 3. Added 2 script:
-   1. First called dev to run the server.js using nodemod `"dev": "nodemon server.js"`
-   2. Second Called start to run the server without listening to changes
+   1. First called dev to run the server.js using nodemod `"dev": "nodemon src/server.js"`
+   2. Second Called start to run the server without listening to changes `"start": "node src/server.js"`
