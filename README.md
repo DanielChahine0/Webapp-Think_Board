@@ -5,11 +5,17 @@ This project will use the MERN stack which contains
 - **R - React:** A front end library.
 - **N - NodeJS:** A Javascript Runtime package that lets us run JS on a server.
 
+---
+# Best Practices
+## REST API
 I created a REST API, which allows my 2 client and server to talk to each other. It uses different HTTP methods:
 - GET → Get some information about a post
 - POST → Create a post
 - PUT → Update a post
 - DELETE → Delete a post
+
+## Separation of Files
+I created a separate folder for the routes and then linked them using prefixing.
 
 --- 
 ## Changes to my JSON Package
