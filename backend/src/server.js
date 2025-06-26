@@ -12,7 +12,12 @@ const PORT= process.env.PORT;
 connectDB();
 
 // middleware
-app.use(express.json())
+app.use(express.json()) // This middleware will parse JSON bosides: req.body
+// custom middleware
+app.use((req,res, next)=>{
+    console.log(`Request method is: ${req.method} & Request URL is ${req.url}`);
+    next();
+});
 
 app.use("/api/notes", notesRoutes);
 
