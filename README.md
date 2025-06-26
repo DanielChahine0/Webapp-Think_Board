@@ -29,3 +29,10 @@ Created a `.env` file that keeps tracks of our environment variable, this file w
 3. Added 2 script:
    1. First called dev to run the server.js using nodemod `"dev": "nodemon src/server.js"`
    2. Second Called start to run the server without listening to changes `"start": "node src/server.js"`
+
+---
+# To add later
+## Change the rate limit to user
+Because there is no authentication, if one of the users reaches the rate limit, all users will be restricted from making request.
+What I actually need to do in the future is to implement some sort of user authentication, and then change the rate limit from `const {success} = await ratelimit.limit("my-rate-limit");` to `const {success} = await ratelimit.limit(userid);`. 
+Maybe we can just change it to ip address instead of the user authentication.

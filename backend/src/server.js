@@ -10,16 +10,23 @@ dotenv.config();
 const app = express();
 const PORT= process.env.PORT;
 
-connectDB();
 
-// middleware
-app.use(express.json()); // This middleware will parse JSON bosides: req.body
-app.use(rateLimiter);
-// custom middleware
 
+// middlewares
+app.use(express.json()); // middleware to parse JSON bosides: req.body
+app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
+// my custom middleware
+app.use((req,res,next)=>{
+    console.log(`Request method is ${req.method} & Request URL is ${req.url}`);
+    next();
+});
 
 app.use("/api/notes", notesRoutes);
 
-app.listen(PORT, () => {
-    console.log("Server started on PORT:", PORT);
-})
+// Make sure that the connection of the database is successfull before running the server 
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("Server started on PORT:", PORT);
+    });
+});
+
