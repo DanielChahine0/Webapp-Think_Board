@@ -1,8 +1,10 @@
 // I'm using the import because I changed package.json to have a module type ("type": "module",)
 import express from "express"
+import cors from "cors";
+import dotenv from "dotenv";
+
 import notesRoutes from "./routes/notesRoutes.js"
 import { connectDB } from "./config/db.js";
-import dotenv from "dotenv";
 import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
@@ -10,9 +12,8 @@ dotenv.config();
 const app = express();
 const PORT= process.env.PORT;
 
-
-
 // middlewares
+app.use(cors({origin:"http://localhost:5173",}));
 app.use(express.json()); // middleware to parse JSON bosides: req.body
 app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
 // my custom middleware
