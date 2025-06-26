@@ -3,6 +3,7 @@ import express from "express"
 import notesRoutes from "./routes/notesRoutes.js"
 import { connectDB } from "./config/db.js";
 import dotenv from "dotenv";
+import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 
@@ -12,12 +13,10 @@ const PORT= process.env.PORT;
 connectDB();
 
 // middleware
-app.use(express.json()) // This middleware will parse JSON bosides: req.body
+app.use(express.json()); // This middleware will parse JSON bosides: req.body
+app.use(rateLimiter);
 // custom middleware
-app.use((req,res, next)=>{
-    console.log(`Request method is: ${req.method} & Request URL is ${req.url}`);
-    next();
-});
+
 
 app.use("/api/notes", notesRoutes);
 
