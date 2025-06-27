@@ -9,7 +9,7 @@ const App = () => {
     // <div data-theme="coffee">
     <div className="relative h-full w-full">
       <div className="absolute inset-0 -z-10 h-full w-full items-center px-5 py-24 
-      [background:radial-gradient(100%_150%_at_50%_5%,#000_50%,#5d0000_80%)]" />
+      [background:radial-gradient(100%_150%_at_50%_5%,#000_50%,#270000_80%)]" />
       <Routes>
         <Route path="/" element={<HomePage/>} />
         <Route path="/create" element={<CreatePage/>} />
