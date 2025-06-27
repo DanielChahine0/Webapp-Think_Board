@@ -2,6 +2,7 @@
 import express from "express"
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 
 import notesRoutes from "./routes/notesRoutes.js"
 import { connectDB } from "./config/db.js";
@@ -11,9 +12,12 @@ dotenv.config();
 
 const app = express();
 const PORT= process.env.PORT;
+const __dirname = path.resolve();
 
 // middlewares
-app.use(cors({origin:"http://localhost:5173",}));
+if (process.env.NODE_ENV !== "production"){
+    app.use(cors({origin:"http://localhost:5173",}));
+}
 app.use(express.json()); // middleware to parse JSON bosides: req.body
 app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
 // my custom middleware
@@ -24,6 +28,13 @@ app.use((req,res,next)=>{
 
 app.use("/api/notes", notesRoutes);
 
+if (process.env.NODE_ENV === "production"){
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+
+    app.get("*", (req,res) => {
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"))
+    });
+}
 // Make sure that the connection of the database is successfull before running the server 
 connectDB().then(() => {
     app.listen(PORT, () => {

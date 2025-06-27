@@ -4,7 +4,8 @@
   "description": "This project will use the MERN stack which contains\r - **M - MongoDB:** A database that gives the app a place to store the data.\r - **E - Express:** A web framework to build web apps easier and faster.\r - **R - React:** A front end library.\r - **N - NodeJS:** A Javascript Runtime package that lets us run JS on a server.",
   "main": "index.js",
   "scripts": {
-    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend"
+    "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
+    "start": "npm run start --prefix backend"
   },
   "repository": {
     "type": "git",
