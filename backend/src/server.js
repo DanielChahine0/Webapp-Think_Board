@@ -21,10 +21,10 @@ if (process.env.NODE_ENV !== "production"){
 app.use(express.json()); // middleware to parse JSON bosides: req.body
 app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
 // my custom middleware
-app.use((req,res,next)=>{
-    console.log(`Request method is ${req.method} & Request URL is ${req.url}`);
-    next();
-});
+// app.use((req,res,next)=>{
+//     console.log(`Request method is ${req.method} & Request URL is ${req.url}`);
+//     next();
+// });
 
 app.use("/api/notes", notesRoutes);
 
