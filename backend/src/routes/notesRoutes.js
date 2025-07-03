@@ -8,6 +8,9 @@ router.get("/:id", getNoteById);
 router.post("/", createNote);
 router.put("/:id", updateNote);
 router.delete("/:id", deleteNote);
+router.get('/login', function(req, res, next) {
+  res.render('login');
+});
 
 
 export default router

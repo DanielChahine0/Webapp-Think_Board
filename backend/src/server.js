@@ -14,6 +14,7 @@ const app = express();
 const PORT= process.env.PORT;
 const __dirname = path.resolve();
 
+
 // middlewares
 if (process.env.NODE_ENV !== "production"){
     app.use(cors({origin:"http://localhost:5173",}));

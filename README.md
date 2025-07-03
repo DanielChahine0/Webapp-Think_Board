@@ -22,8 +22,38 @@ Even for the routes files, I have created a `controller` folder that contains al
 ## Secrecy 
 Created a `.env` file that keeps tracks of our environment variable, this file will be hidden using the gitignore system. It will contain the port we're running the server on and the link for the database. 
 
+## NOTES
+When working on this app, the environment variable of the NODE_ENV should be set to "production". When the editing is done and the app is read to be deployed, that same variable should be changed to "development".
+
 --- 
-## Changes to my JSON Package
+# Files
+## Environment Variables `.env`
+- `MONGO_URI` is the connection string of the Mongoose Database
+- `RATE_LIMIT_TOKENS` lets ops override the limit without code changes
+- `RATE_LIMIT_WINDOW` lets ops override the limit windown without code changes
+
+## `db.js`
+This file exposes a single async function, **`connectDB()`**, that opens a Mongoose connection using the connection string stored in the `MONGO_URI` environment variable.
+
+## `upstash.js`
+Creates and exports a ready-to-use **sliding-window** limiter that allows **50 requests per 30 s** by default.
+
+## `notesController.js`
+Small, self-contained controller module for a **Mongoose / Express** “Notes” API. It exposes the five classic CRUD operations: list, read, create, update, and delete.
+
+| HTTP Verb | Route            | Controller            | Purpose                                   | Success code |
+|-----------|------------------|-----------------------|-------------------------------------------|--------------|
+| GET       | `/notes`         | `getAllNotes`         | Return **all notes**, newest first        | `200 OK`     |
+| GET       | `/notes/:id`     | `getNoteById`         | Return one note by its **Mongo ObjectId** | `200 OK`     |
+| POST      | `/notes`         | `createNote`          | Create a note from `{ title, content }`   | `201 Created`|
+| PUT       | `/notes/:id`     | `updateNote`          | Replace title/content of an existing note | `200 OK`     |
+| DELETE    | `/notes/:id`     | `deleteNote`          | Permanently remove a note                 | `200 OK`     |
+
+All 3× unsuccessful look-ups (`:id` not found) respond with `404 Not Found`.  
+Unexpected errors bubble up as `500 Internal Server Error` with a JSON body: `{ "message": "Internal server error" }`.
+
+
+## `Package JSON` 
 1. Changed the type to module to be able to use proper imports `"type": "module"`
 2. Installed nodemon to simulate a live server `"devDependencies": {"nodemon": "^3.1.10"}`
 3. Added 2 script:
