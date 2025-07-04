@@ -65,9 +65,8 @@ export async function createNote(req, res) {
 
         // Simple guard — use a proper validator (e.g. Zod) in production
         if (!title || !content) {
-        return res.status(400).json({ message: "Title and content are required" });
+            return res.status(400).json({ message: "Title and content are required" });
         }
-
 
         const note = new Note ({title, content});
         const savedNote = await note.save();
@@ -86,26 +85,23 @@ export async function createNote(req, res) {
  */
 export async function updateNote(req, res) {
     try {
-        // Build the update object dynamically so undefined values are NOT persisted
-        const update = {};
-        if (title !== undefined) update.title = title;
-        if (content !== undefined) update.content = content;
-
+        // Get the body of the request
+        const {title, content} = req.body;
+        
         // Search the note with the id parameter passed through the URL
-        const note = await Note.findByIdAndUpdate(
-        req.params.id,
-        update,
-        {
-            new: true,          // return the modified doc
-            runValidators: true // honour schema validation rules
-        }
+        const updatedNote = await Note.findByIdAndUpdate(
+            req.params.id,
+            {title, content},
+            {
+                new: true,          // return the modified doc
+                runValidators: true // honour schema validation rules
+            }
         );
 
         // If the id parameter is not found, then return with status 404
         if (!updatedNote) {
             return res.status(404).json({message:"Note Not Found"});
         }
-        
         // Otherwise, return with status 200 for ok
         res.status(200).json(updatedNote);
     } catch (error) {

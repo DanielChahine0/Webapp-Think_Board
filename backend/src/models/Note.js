@@ -1,3 +1,7 @@
+/**
+ * Note model: represents a single user note.
+ * Includes validation, indexes, and cleaner JSON output.
+ */
 import mongoose from "mongoose";
 
 // 1. Create a schema
@@ -6,7 +10,9 @@ import mongoose from "mongoose";
 const noteSchema = new mongoose.Schema({
     title:{
         type: String, 
-        required: true,
+        required: [true, "Title is required"],
+        // trim: true,
+
     },
 
     content:{
