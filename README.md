@@ -22,8 +22,7 @@ Even for the routes files, I have created a `controller` folder that contains al
 ## Secrecy 
 Created a `.env` file that keeps tracks of our environment variable, this file will be hidden using the gitignore system. It will contain the port we're running the server on and the link for the database. 
 
-## NOTES
-When working on this app, the environment variable of the NODE_ENV should be set to "production". When the editing is done and the app is read to be deployed, that same variable should be changed to "development".
+
 
 --- 
 # Files
@@ -31,6 +30,9 @@ When working on this app, the environment variable of the NODE_ENV should be set
 - `MONGO_URI` is the connection string of the Mongoose Database
 - `RATE_LIMIT_TOKENS` lets ops override the limit without code changes
 - `RATE_LIMIT_WINDOW` lets ops override the limit windown without code changes
+- `NODE_ENV` is the current type of runtime context we are in.
+  -  **`"development"`** indicates that I am actively coding, debugging, and hot-reloading. In this context, the application should be ran through 2 terminals using `npm run dev` each time. Under the backend folder (preferably using *nodemon*) and under frontend folder.
+  -  **`"production"`** indicates that I am serving real users. In this context, the application should be built using `npm run build` and then started using `npm run start`. Both commands should be executed under the main folder. 
 
 ## `db.js`
 This file exposes a single async function, **`connectDB()`**, that opens a Mongoose connection using the connection string stored in the `MONGO_URI` environment variable.
@@ -52,6 +54,11 @@ Small, self-contained controller module for a **Mongoose / Express** “Notes”
 All 3× unsuccessful look-ups (`:id` not found) respond with `404 Not Found`.  
 Unexpected errors bubble up as `500 Internal Server Error` with a JSON body: `{ "message": "Internal server error" }`.
 
+## `rateLimiter.js`
+Express middleware that throttles incoming requests with Upstash Ratelimit.
+- Consumes one token per hit (`"my-limit-key"` bucket).
+- If the bucket is empty ⇒ responds 429 Too Many Requests.
+- Otherwise passes control to the next handler.
 
 ## `Package JSON` 
 1. Changed the type to module to be able to use proper imports `"type": "module"`

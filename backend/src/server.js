@@ -17,7 +17,7 @@ const __dirname = path.resolve();
 
 // middlewares
 if (process.env.NODE_ENV !== "production"){
-    app.use(cors({origin:"http://localhost:5173",}));
+    app.use(cors({origin:"http://localhost:5173"}));
 }
 app.use(express.json()); // middleware to parse JSON bosides: req.body
 app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
