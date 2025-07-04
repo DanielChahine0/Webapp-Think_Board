@@ -60,6 +60,9 @@ Express middleware that throttles incoming requests with Upstash Ratelimit.
 - If the bucket is empty ⇒ responds 429 Too Many Requests.
 - Otherwise passes control to the next handler.
 
+## `Note.js`
+This file defines a Mongoose model called Note, representing an individual user note stored in MongoDB. Each note has a title and content, both trimmed, required strings; the title must be unique and between one and 120 characters long. The schema automatically records `createdAt` and `updatedAt` timestamps while omitting the default `__v` version field. To speed up look-ups, it adds a full-text index over the title and content and a descending index on `createdAt` for quick access to the newest notes.
+
 ## `Package JSON` 
 1. Changed the type to module to be able to use proper imports `"type": "module"`
 2. Installed nodemon to simulate a live server `"devDependencies": {"nodemon": "^3.1.10"}`
