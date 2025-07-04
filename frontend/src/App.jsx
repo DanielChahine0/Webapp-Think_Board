@@ -3,6 +3,7 @@ import HomePage from "./pages/HomePage";
 import CreatePage from "./pages/CreatePage";
 import NoteDetailPage from "./pages/NoteDetailPage";
 import toast from "react-hot-toast";
+import LoginPage from "./pages/login";
 
 const App = () => {
   return (
@@ -12,6 +13,7 @@ const App = () => {
       [background:radial-gradient(100%_150%_at_50%_5%,#000_50%,#270000_80%)]" />
       <Routes>
         <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<LoginPage />} />
         <Route path="/create" element={<CreatePage />} />
         <Route path="/note/:id" element={<NoteDetailPage />} />
       </Routes>

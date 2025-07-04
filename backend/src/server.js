@@ -10,6 +10,7 @@ import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 
+var authRouter = require('./routes/auth');
 const app = express();
 const PORT= process.env.PORT;
 const __dirname = path.resolve();
@@ -27,6 +28,7 @@ app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
 //     next();
 // });
 
+app.use('/', authRouter);
 app.use("/api/notes", notesRoutes);
 
 if (process.env.NODE_ENV === "production"){
