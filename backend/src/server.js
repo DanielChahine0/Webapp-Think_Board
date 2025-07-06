@@ -10,11 +10,9 @@ import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 
-var authRouter = require('./routes/auth');
 const app = express();
 const PORT= process.env.PORT;
 const __dirname = path.resolve();
-
 
 // middlewares
 if (process.env.NODE_ENV !== "production"){
@@ -22,14 +20,13 @@ if (process.env.NODE_ENV !== "production"){
 }
 app.use(express.json()); // middleware to parse JSON bosides: req.body
 app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
-// my custom middleware
+// Custom Middleware 
 // app.use((req,res,next)=>{
 //     console.log(`Request method is ${req.method} & Request URL is ${req.url}`);
 //     next();
 // });
-
-app.use('/', authRouter);
 app.use("/api/notes", notesRoutes);
+
 
 if (process.env.NODE_ENV === "production"){
     app.use(express.static(path.join(__dirname, "../frontend/dist")));
