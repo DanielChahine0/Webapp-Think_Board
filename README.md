@@ -43,15 +43,15 @@ Creates and exports a ready-to-use **sliding-window** limiter that allows **50 r
 ## `notesController.js`
 Small, self-contained controller module for a **Mongoose / Express** “Notes” API. It exposes the five classic CRUD operations: list, read, create, update, and delete.
 
-| HTTP Verb | Route            | Controller            | Purpose                                   | Success code |
-|-----------|------------------|-----------------------|-------------------------------------------|--------------|
+| HTTP Verb | Route | Controller |Purpose | Success code |
+|-|-|-|-|-|
 | GET       | `/notes`         | `getAllNotes`         | Return **all notes**, newest first        | `200 OK`     |
 | GET       | `/notes/:id`     | `getNoteById`         | Return one note by its **Mongo ObjectId** | `200 OK`     |
 | POST      | `/notes`         | `createNote`          | Create a note from `{ title, content }`   | `201 Created`|
 | PUT       | `/notes/:id`     | `updateNote`          | Replace title/content of an existing note | `200 OK`     |
 | DELETE    | `/notes/:id`     | `deleteNote`          | Permanently remove a note                 | `200 OK`     |
 
-All 3× unsuccessful look-ups (`:id` not found) respond with `404 Not Found`.  
+All 3 unsuccessful look-ups (`:id` not found) respond with `404 Not Found`.  
 Unexpected errors bubble up as `500 Internal Server Error` with a JSON body: `{ "message": "Internal server error" }`.
 
 ## `rateLimiter.js`
@@ -61,7 +61,19 @@ Express middleware that throttles incoming requests with Upstash Ratelimit.
 - Otherwise passes control to the next handler.
 
 ## `Note.js`
-This file defines a Mongoose model called Note, representing an individual user note stored in MongoDB. Each note has a title and content, both trimmed, required strings; the title must be unique and between one and 120 characters long. The schema automatically records `createdAt` and `updatedAt` timestamps while omitting the default `__v` version field. To speed up look-ups, it adds a full-text index over the title and content and a descending index on `createdAt` for quick access to the newest notes.
+This file defines a Mongoose model called `Note`, representing an individual user note stored in **MongoDB**. Each note has a title and content, both trimmed, required strings; the title must be unique and between one and 120 characters long. The schema automatically records `createdAt` and `updatedAt` timestamps while omitting the default `__v` version field. To speed up look-ups, it adds a full-text index over the title and content and a descending index on `createdAt` for quick access to the newest notes.
+
+## `noteRoutes.js`
+RESTful router for the /api/notes endpoints in an Express app.
+
+| Method	| Path | Action |
+|-|-|-|
+| GET | `/` |	List all notes |
+| GET	| `/:id` | Fetch one note |
+| POST | `/` | Create note |
+| PUT | `/:id` | Update note |
+| DELETE | `/:id` | Delete note |
+| GET | `/login` | Render login view |
 
 ## `Package JSON` 
 1. Changed the type to module to be able to use proper imports `"type": "module"`
