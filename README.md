@@ -81,3 +81,6 @@ Think Board is a modern, full-stack “idea capture” workspace built with the 
 - **Developer-friendly workflow** – Nodemon auto-reloads the server, ESLint enforces code quality, and environment variables (.env) keep secrets out of source control.
 
 The badge block at the top of the `README` shows the repo’s last commit date, primary language, and language count, assuring newcomers the project is actively maintained. A second badge grid highlights every key tool so contributors can instantly see if the tech stack fits their skill set.
+
+### Deployement
+The app was deployed through Render.com and is active under [Think Board](https://webapp-think-board.onrender.com/)
