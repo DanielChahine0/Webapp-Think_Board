@@ -11,9 +11,9 @@ import {
 } from "../controllers/notesControllers.js";
 
 // Initialize a new router instance
-var router = express.Router();
+const router = express.Router();
 
-/* ---------- RESTful API routes for /api/notes ---------- */
+/* ---------- REST API routes for /api/notes ---------- */
 
 // GET /api/notes        → return all notes (sorted, filtered, etc. in the controller)
 router.get("/", getAllNotes);

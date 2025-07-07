@@ -1,6 +1,7 @@
 // I'm using the import because I changed package.json to have a module type ("type": "module",)
 import express from "express"
 import cors from "cors";
+import helmet from "helmet";
 import dotenv from "dotenv";
 import path from "path";
 
@@ -10,10 +11,14 @@ import rateLimiter from "./middleware/rateLimiter.js";
 
 dotenv.config();
 
-const app = express();
+/* ─── Constants ────────────────────────────────────────────────────────── */
 const PORT= process.env.PORT;
 const __dirname = path.resolve();
 
+/* ─── App Setup ────────────────────────────────────────────────────────── */
+const app = express();
+
+app.use(helmet());
 // middlewares
 if (process.env.NODE_ENV !== "production"){
     app.use(cors({origin:"http://localhost:5173"}));
