@@ -40,11 +40,6 @@ if (NODE_ENV === "production"){
 
 /* ─── DB & Server bootstrap ────────────────────────────────────────────── */
 // Make sure that the connection of the database is successfull before running the server 
-// connectDB().then(() => {
-//     app.listen(PORT, () => {
-//         console.log("Server started on PORT:", PORT);
-//     });
-// });
 (async () => {
   try {
     await connectDB();

@@ -1,4 +1,4 @@
-# Think Board - Web Application
+# Think Board - Backend
 This project will use the MERN stack which contains
 - **M - MongoDB:** A database that gives the app a place to store the data.
 - **E - Express:** A web framework to build web apps easier and faster.
@@ -75,6 +75,15 @@ RESTful router for the /api/notes endpoints in an Express app.
 | DELETE | `/:id` | Delete note |
 | GET | `/login` | Render login view |
 
+## `server.js`
+A minimal Express + MongoDB service that powers a /api/notes REST endpoint and can also serve a front-end build in production.
+- ES-module codebase ("type": "module" in package.json)
+- Security headers via helmet
+- CORS (origin pulled from CORS_ORIGIN)
+- Token-bucket rate limiting middleware
+- Graceful shutdown on SIGINT/SIGTERM
+
+Serves frontend/dist static files when NODE_ENV=production
 ## `Package JSON` 
 1. Changed the type to module to be able to use proper imports `"type": "module"`
 2. Installed nodemon to simulate a live server `"devDependencies": {"nodemon": "^3.1.10"}`
