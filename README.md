@@ -1,7 +1,6 @@
 <!-- README.md – WEBAPP-THINK_BOARD -->
 <h1 align="center">Think Board</h1>
 <p align="center"><em>Unleash Creativity, Organize Ideas Instantly</em></p>
-<p align="center">Think Board is your go-to digital whiteboard—quick to set up, pleasant to use, and engineered with a production-ready toolchain from database to UI<p>
 
 <p align="center">
   
