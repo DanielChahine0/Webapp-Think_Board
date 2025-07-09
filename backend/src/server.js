@@ -23,6 +23,14 @@ const __dirname = path.resolve();
 /* ─── App Setup ────────────────────────────────────────────────────────── */
 const app = express();
 
+app.get("/", (req, res) => {
+  res.send('<a href="/auth/google">Authenticate with Google</a>');
+});
+
+app.get('/protected', (req, res) => {
+  res.send('Hello');
+});
+
 app.use(helmet());
 if (NODE_ENV !== "production"){app.use(cors({origin:ALLOWED_ORIGIN}));}
 app.use(express.json()); // middleware to parse JSON bosides: req.body
