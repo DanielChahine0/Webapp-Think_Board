@@ -1,5 +1,6 @@
 // I'm using the import because I changed package.json to have a module type ("type": "module",)
 import express from "express"
+import session from "express-session";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
@@ -14,6 +15,13 @@ import "./config/auth.js"; // Import auth config to initialize passport strategi
 dotenv.config();
 
 
+function isLoggedIn(req, res, next) {
+  if (req.user) {
+    return next();
+  }
+  res.sendStatus(401); // Unauthorized'
+}
+
 /* ─── Constants ────────────────────────────────────────────────────────── */
 const PORT= process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV ?? "development";
@@ -25,18 +33,44 @@ const __dirname = path.resolve();
 
 /* ─── App Setup ────────────────────────────────────────────────────────── */
 const app = express();
+app.use(session({ secret: process.env.SECRET})); // Session secret for signing the session ID cookie
+app.use(passport.initialize());
+app.use(passport.session()); // Persistent login sessions
 
+/* ─── Passport.js Setup ────────────────────────────────────────────── */
 app.get("/", (req, res) => {
   res.send('<a href="/auth/google">Authenticate with Google</a>');
 });
 
-app.get('/protected', (req, res) => {
-  res.send('Hello');
-});
+
 app.get('/auth/google',
   passport.authenticate('google', {scope: ['email', 'profile']})
 );
 
+app.get('/google/callback',
+  passport.authenticate('google', {
+    successRedirect: '/protected',
+    failureRedirect: '/auth/failure',
+  })
+);
+
+app.get('/auth/failure', (req, res) =>{
+  res.send('something went wrong..');
+});
+
+app.get('/protected', isLoggedIn, (req, res) => {
+  res.send(`Hello ${req.user.displayName}`);
+});
+
+app.get('/logout', (req, res) => {
+  req.logout(function(err){
+    if (err) { return res.status(500).send('Logout failed');}
+  });
+  req.session.destroy();
+  res.send('You have been logged out');
+});
+
+/* Callback route for Google to redirect to after authentication */
 app.use(helmet());
 if (NODE_ENV !== "production"){app.use(cors({origin:ALLOWED_ORIGIN}));}
 app.use(express.json()); // middleware to parse JSON bosides: req.body

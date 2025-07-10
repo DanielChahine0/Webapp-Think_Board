@@ -12,7 +12,8 @@ passport.use(new GoogleStrategy({
     passReqToCallback   : true
   },
   function(request, accessToken, refreshToken, profile, done) {
-    return done(err, profile);
+    // CREATE A USER IN YOUR DATABASE HERE
+    return done(null, profile);
   }
 ));
 
