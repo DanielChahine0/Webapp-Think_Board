@@ -8,6 +8,8 @@ import path from "path";
 import notesRoutes from "./routes/notesRoutes.js"
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
+import passport from "passport";
+import "./config/auth.js"; // Import auth config to initialize passport strategies
 
 dotenv.config();
 
@@ -16,6 +18,7 @@ dotenv.config();
 const PORT= process.env.PORT;
 const NODE_ENV = process.env.NODE_ENV ?? "development";
 const ALLOWED_ORIGIN = process.env.CORS_ORIGIN ?? "http://localhost:5173";
+
 
 const __dirname = path.resolve();
 
@@ -30,6 +33,9 @@ app.get("/", (req, res) => {
 app.get('/protected', (req, res) => {
   res.send('Hello');
 });
+app.get('/auth/google',
+  passport.authenticate('google', {scope: ['email', 'profile']})
+);
 
 app.use(helmet());
 if (NODE_ENV !== "production"){app.use(cors({origin:ALLOWED_ORIGIN}));}
