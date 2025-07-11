@@ -65,9 +65,9 @@ app.get('/protected', isLoggedIn, (req, res) => {
 app.get('/logout', (req, res) => {
   req.logout(function(err){
     if (err) { return res.status(500).send('Logout failed');}
+    req.session.destroy();
+    res.send('You have been logged out');
   });
-  req.session.destroy();
-  res.send('You have been logged out');
 });
 
 /* Callback route for Google to redirect to after authentication */
