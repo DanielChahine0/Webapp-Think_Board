@@ -14,7 +14,7 @@
 
 ---
 
-## Built with the tools and technologies
+## Built with
 
 <p align="center">
   <img src="https://img.shields.io/badge/JavaScript-f7df1e?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript badge"/>
