@@ -1,12 +1,13 @@
 // I'm using the import because I changed package.json to have a module type ("type": "module",)
-import express from "express"
+import express from "express";
 import session from "express-session";
 import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import path from "path";
+import { fileURLToPath } from "url"; // <-- Add this for __dirname in ES modules
 
-import notesRoutes from "./routes/notesRoutes.js"
+import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
 import rateLimiter from "./middleware/rateLimiter.js";
 import passport from "passport";
@@ -23,17 +24,35 @@ function isLoggedIn(req, res, next) {
 }
 
 /* ─── Constants ────────────────────────────────────────────────────────── */
-const PORT= process.env.PORT;
+const PORT = process.env.PORT || 5001;
 const NODE_ENV = process.env.NODE_ENV ?? "development";
 const ALLOWED_ORIGIN = process.env.CORS_ORIGIN ?? "http://localhost:5173";
 
-
-const __dirname = path.resolve();
-
+// Fix __dirname for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /* ─── App Setup ────────────────────────────────────────────────────────── */
 const app = express();
-app.use(session({ secret: process.env.SECRET})); // Session secret for signing the session ID cookie
+
+app.use(helmet());
+
+if (NODE_ENV !== "production") {
+  app.use(cors({
+    origin: ALLOWED_ORIGIN,
+    credentials: true,
+  }));
+}
+
+app.use(express.json());
+
+// Session and passport setup must come AFTER express.json and cors
+app.use(session({
+  secret: process.env.SECRET || "default_secret",
+  resave: false,
+  saveUninitialized: false,
+  cookie: NODE_ENV === "production" ? { secure: true, sameSite: "lax" } : {},
+}));
 app.use(passport.initialize());
 app.use(passport.session()); // Persistent login sessions
 
@@ -49,7 +68,7 @@ app.get('/auth/google',
 
 app.get('/google/callback',
   passport.authenticate('google', {
-    successRedirect: '/protected',
+    successRedirect: `${ALLOWED_ORIGIN}/home`, // <-- redirect to frontend
     failureRedirect: '/auth/failure',
   })
 );
@@ -62,26 +81,29 @@ app.get('/protected', isLoggedIn, (req, res) => {
   res.send(`Hello ${req.user.displayName}`);
 });
 
-app.get('/logout', (req, res) => {
+app.get('/logout', (req, res, next) => {
+  if (!req.isAuthenticated || !req.isAuthenticated()) {
+    return res.status(400).send('Not logged in');
+  }
   req.logout(function(err){
-    if (err) { return res.status(500).send('Logout failed');}
-    req.session.destroy();
-    res.send('You have been logged out');
+    if (err) { return next(err); }
+    req.session.destroy(function(err) {
+      if (err) { return res.status(500).send('Logout failed'); }
+      res.send('You have been logged out');
+    });
   });
 });
 
 /* Callback route for Google to redirect to after authentication */
-app.use(helmet());
-if (NODE_ENV !== "production"){app.use(cors({origin:ALLOWED_ORIGIN}));}
-app.use(express.json()); // middleware to parse JSON bosides: req.body
-app.use(rateLimiter);    // ratelimiter middleware to help with over requesting
-app.use("/api/notes", notesRoutes);
+
+// Fix: Only apply rateLimiter to /api/notes, not globally
+app.use("/api/notes", rateLimiter, notesRoutes);
 
 if (NODE_ENV === "production"){
     const distPath = path.join(__dirname, "../frontend/dist");
     app.use(express.static(distPath));
     app.get("*", (req,res) => {
-        res.sendFile(path.join(distPath, "index.html"))
+        res.sendFile(path.join(distPath, "index.html"));
     });
 }
 
@@ -98,8 +120,9 @@ if (NODE_ENV === "production"){
     /* Graceful shutdown */
     const shutdown = async (signal) => {
       console.log(`\n${signal} received — closing server…`);
-      await server.close();
-      process.exit(0);
+      server.close(() => {
+        process.exit(0);
+      });
     };
     process.on("SIGINT",  () => shutdown("SIGINT"));
     process.on("SIGTERM", () => shutdown("SIGTERM"));
